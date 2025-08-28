@@ -1,36 +1,49 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 
+const datObj = {}
+
+function genPrompt() {
+    let string = "please create a character with following features :";
+
+    for (const key in datObj) {
+        string += ` ${key} = ${datObj[key]};`;
+    }
+
+    string += " the character should have face view with base rotated with some degree, so that side part of the character is also visible.";
+    return string
+}
 
 export default function Page() {
     let level = 0;
+    const [finalPrompt, setFinalPrompt] = useState("")
+
     return (
         <div>
-            {Object.keys(object) && Object.keys(object).length > 0 && Object.keys(object).map((each, index) => {
-                const [open, setOpen] = useState(false)
-                return (
-                    <div key={index} className="">
-                        <pre> {" ".repeat(level)} {"=>"} <input type='checkbox' value={open} onChange={() => setOpen(!open)} /> {each}</pre>
-                        {
-                            open &&
-                            (Array.isArray(object[each]) ? <SingleEntity array={object[each]} level={level} /> : object instanceof Object && <DigDown level={level} object={object[each]} />)
-                        }
-                    </div>
-                )
-            })}
+            <DigDown level={level} object={object} base={""} />
+
+            <div className="">
+                <button onClick={() => setFinalPrompt(genPrompt())} className='px-4 py-2 border-2 rounded-xl bg-blue-800 text-white'>Generate</button>
+                <div className="">{finalPrompt}</div>
+            </div>
         </div>
     )
 }
 
-const SingleEntity = ({ array, level }) => {
-    level += 2;
+const SingleEntity = ({ array, level, base }) => {
+    const [selected, setSelected] = useState(new Array(array.length).fill(false))
     return (
         <div className="">
             {array && array.length > 0 && array.map((each, index) => {
+                useEffect(() => {
+                    if (selected[index]) {
+                        datObj[base] = each
+                    }
+                }, [selected[index]])
                 return (
                     <div key={index} className="flex">
-                        <pre>{"\t".repeat(level)} <input type='checkbox' /> {each}</pre>
+                        <pre>{"\t".repeat(level)} <input checked={selected[index]} onChange={() => { setSelected((prev) => prev.map((each, ind) => ind === index && !each)) }} type='checkbox' /> {each}</pre>
                     </div>
 
                 )
@@ -39,11 +52,8 @@ const SingleEntity = ({ array, level }) => {
     )
 }
 
-const DigDown = ({ level, object }) => {
-    level += 2
-    if (level > 2){
-        console.log("first",object)
-    }
+const DigDown = ({ level, object, base }) => {
+
     return (
         <div className="">
             {Object.keys(object) && Object.keys(object).length > 0 && Object.keys(object).map((each, index) => {
@@ -53,7 +63,7 @@ const DigDown = ({ level, object }) => {
                         <pre>{"\t".repeat(level)} {Array.isArray(object) ? "" : "=>"} <input type='checkbox' value={open} onChange={() => setOpen(!open)} /> {each}</pre>
 
                         {open &&
-                            (Array.isArray(object[each]) ? <SingleEntity array={object[each]} level={level} /> : object[each] instanceof Object && <DigDown level={level} object={object[each]} />)
+                            (Array.isArray(object[each]) ? <SingleEntity array={object[each]} level={level + 2} base={base + "_" + each} /> : object[each] instanceof Object && <DigDown level={level + 2} object={object[each]} base={base ? base + "_" + each : each} />)
                         }
                     </div>
                 )

@@ -23,8 +23,6 @@ function genPrompt() {
 
     return string
 }
-const themecolor = "#121a3d"
-// const themecolor = "#ff5b00"
 
 export default function Page() {
     const page_heading = "Customise Your Character";
@@ -55,8 +53,8 @@ export default function Page() {
             <DigDown level={level} object={object} base={""} />
             <div className="m-2">
                 <div className="flex justify-center gap-4 my-2">
-                    <button onClick={() => location.reload()} style={{color:themecolor, borderColor:themecolor}} className='px-4 py-1.5 border-2 rounded-xl font-semibold '>Clear</button>
-                    <button onClick={() => setFinalPrompt(genPrompt())} style={{backgroundColor:themecolor}} className='px-4 py-1.5  rounded-xl  text-white'>Generate</button>
+                    {/* <button onClick={() => {setFinalPrompt("") ; datObj={}}} className='px-4 py-1.5 border-2 border-blue-500 rounded-xl  text-blue-700'>Clear</button> */}
+                    <button onClick={() => setFinalPrompt(genPrompt())} className='px-4 py-1.5  rounded-xl bg-blue-700 text-white'>Generate</button>
                 </div>
 
                 <div className="p-2 border border-gray-300 rounded-sm">
@@ -106,9 +104,9 @@ const SingleEntity = ({ array, level, base }) => {
 }
 
 const DigDown = ({ level, object, base }) => {
+
     return (
-        <div style={{ marginLeft: level * 10 }} className={` rounded-md py-0 ${level>0?"border z-20 shadow-xl":""} mb-2 border-gray-300 p-4 `}>
-            <div style={{color:themecolor}} className="pt-2 text-sm font-semibold ">{base} features :</div>
+        <div style={{ marginLeft: level * 10 }} className={`border-l py-0 mb-2 border-gray-300 p-4  `}>
             {Object.keys(object) && Object.keys(object).length > 0 && Object.keys(object).map((each, index) => {
                 const [open, setOpen] = useState(false)
                 function handleCloseDiv() {
@@ -131,7 +129,6 @@ const DigDown = ({ level, object, base }) => {
 }
 
 
-// Style: ["straight", "curly", "wavy", "coiled", "tied", "loose", "layered", "bangs"],
 
 const object = {
     Hair: {

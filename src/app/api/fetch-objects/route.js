@@ -3,7 +3,6 @@ import db_connection from "@/server/mongoDbConnect";
 export async function GET() {
     try {
         const data = await db_connection.collection("objects").find({},{ projection : {object_name:1}}).toArray()
-        console.log("first",data)
         return Response.json({status:true, data:data})
     }
     catch(e){

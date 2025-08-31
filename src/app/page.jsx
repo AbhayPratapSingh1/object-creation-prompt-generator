@@ -3,16 +3,14 @@
 import React from 'react'
 import ObjectsMapping from './components/objectsMapping'
 import { headers } from 'next/headers'
+import db_connection from '@/server/mongoDbConnect'
 
 async function fetchObjectData() {
   try {
 
-    const host = (await headers()).get("host")
-    const protocol = process.env.NODE_ENV === "development" ? "http" : "https"
-    const base_url = `${protocol}://${host}`
-    let data = await fetch(`${base_url}/api/fetch-objects`)
 
-    data = await data.json()
+    const data = await db_connection.collection("objects").find({}, { projection: { object_name: 1 } }).toArray()
+    
     return data
   }
   catch (e) {

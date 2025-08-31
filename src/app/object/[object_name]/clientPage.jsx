@@ -12,7 +12,7 @@ function genPrompt() {
     let ob = Object.keys(datObj)
     ob = ob.sort()
 
-    let string = "Please create a animated character with following features :";
+    let string = "Please create animated or real entity with following features :";
 
     for (const key in datObj) {
         string += ` ${datObj[key]} ${key};`;
@@ -23,9 +23,11 @@ function genPrompt() {
 
     return string
 }
+const themecolor = "#121a3d"
+// const themecolor = "#ff5b00"
 
-export default function Page() {
-    const page_heading = "Customise Your Character";
+export default function ClientPage({data}) {
+    const page_heading = `Customise Your ${data.object_name}`;
     let level = 0;
     const [finalPrompt, setFinalPrompt] = useState("")
     const textBoxRef = useRef(null)
@@ -35,6 +37,7 @@ export default function Page() {
         textBoxRef.current.style.height = textBoxRef.current.scrollHeight + "px";
     }, [finalPrompt])
 
+    let object = data.parameters
     async function handleCopyClick() {
         try {
             await navigator.clipboard.writeText(finalPrompt)
@@ -53,8 +56,8 @@ export default function Page() {
             <DigDown level={level} object={object} base={""} />
             <div className="m-2">
                 <div className="flex justify-center gap-4 my-2">
-                    {/* <button onClick={() => {setFinalPrompt("") ; datObj={}}} className='px-4 py-1.5 border-2 border-blue-500 rounded-xl  text-blue-700'>Clear</button> */}
-                    <button onClick={() => setFinalPrompt(genPrompt())} className='px-4 py-1.5  rounded-xl bg-blue-700 text-white'>Generate</button>
+                    <button onClick={() => location.reload()} style={{ color: themecolor, borderColor: themecolor }} className='px-4 py-1.5 border-2 rounded-xl font-semibold '>Clear</button>
+                    <button onClick={() => setFinalPrompt(genPrompt())} style={{ backgroundColor: themecolor }} className='px-4 py-1.5  rounded-xl  text-white'>Generate</button>
                 </div>
 
                 <div className="p-2 border border-gray-300 rounded-sm">
@@ -104,9 +107,9 @@ const SingleEntity = ({ array, level, base }) => {
 }
 
 const DigDown = ({ level, object, base }) => {
-
     return (
-        <div style={{ marginLeft: level * 10 }} className={`border-l py-0 mb-2 border-gray-300 p-4  `}>
+        <div style={{ marginLeft: level * 10 }} className={` rounded-md py-0 ${level > 0 ? "border z-20 shadow-xl" : ""} mb-2 border-gray-300 p-4 `}>
+            <div style={{ color: themecolor }} className="pt-2 text-sm font-semibold ">{base} features :</div>
             {Object.keys(object) && Object.keys(object).length > 0 && Object.keys(object).map((each, index) => {
                 const [open, setOpen] = useState(false)
                 function handleCloseDiv() {
@@ -129,99 +132,3 @@ const DigDown = ({ level, object, base }) => {
 }
 
 
-
-const object = {
-    Hair: {
-        Style: ["straight", "curly", "wavy", "coiled", "tied", "loose", "layered", "bangs"],
-        Color: ["black", "brown", "blonde", "red", "gray", "dyed", "highlighted", "ombre"],
-        Texture: ["silky", "coarse", "frizzy", "smooth", "thick", "thin"],
-        Length: ["short", "medium", "long", "shoulder-length"]
-    },
-    Eyes: {
-        Color: ["brown", "black", "hazel", "blue", "green", "gray", "amber"],
-        Shape: ["almond", "round", "hooded", "monolid", "deep-set"],
-        Size: ["small", "medium", "large", "wide-set", "close-set"],
-        Expression: ["sharp", "soft", "kind", "stern", "curious", "dreamy"]
-    },
-    Nose: {
-        Shape: ["straight", "hooked", "button", "aquiline", "flat", "wide", "narrow"],
-        Size: ["small", "medium", "large", "prominent"],
-        Bridge: ["high", "low", "wide", "narrow"]
-    },
-    Lips: {
-        Shape: ["thin", "full", "bow-shaped", "wide"],
-        Size: ["small", "medium", "large"],
-        Color: ["natural pink", "pale", "dusky", "pigmented"],
-        Fullness: ["plump", "thin", "uneven"]
-    },
-    FaceShape: ["oval", "round", "square", "heart-shaped", "diamond", "rectangular", "triangular"],
-
-    Hands: {
-        Size: ["small", "medium", "large"],
-        Shape: ["slender", "broad", "bony", "delicate"],
-        FingerLength: ["short", "long", "proportionate"]
-    },
-    Fingers: {
-        Length: ["short", "long", "tapered"],
-        Thickness: ["thin", "thick", "bony"],
-        Nails: ["short", "long", "oval", "square", "polished", "natural"]
-    },
-    Torso: {
-        MuscleTone: ["defined", "average", "soft"],
-        Shape: ["broad", "narrow", "V-shaped", "rectangular"],
-        Size: ["slim", "average", "bulky"]
-    },
-    Legs: {
-        Length: ["long", "short", "proportionate"],
-        MuscleTone: ["toned", "average", "soft"],
-        Shape: ["straight", "curved", "lean"]
-    },
-    Age: ["child", "teenager", "young adult", "middle-aged", "elderly"],
-    Gender: ["male", "female", "non-binary", "gender-fluid"],
-    Skintone: ["fair", "light", "medium", "tan", "olive", "brown", "dark"],
-    Height: ["short", "average", "tall"],
-    BodyType: ["slender", "athletic", "muscular", "curvy", "stocky", "petite", "plus-size"],
-    Dressing: {
-        Style: ["casual", "formal", "traditional", "sporty", "trendy", "elegant"],
-        ColorPalette: ["bright", "muted", "pastel", "monochrome"],
-        Fabric: ["cotton", "silk", "denim", "leather", "linen"],
-        Accessories: ["scarf", "belt", "tie", "jacket"]
-    },
-    Footwear: {
-        Type: ["sneakers", "sandals", "boots", "heels", "flats", "loafers"],
-        Style: ["formal", "casual", "sporty", "traditional"],
-        Material: ["leather", "canvas", "synthetic", "rubber"],
-        Color: ["neutral", "bright", "patterned"]
-    },
-    Accessories: {
-        Type: ["jewelry", "glasses", "watch", "bag", "hat"],
-        Style: ["minimal", "bold", "ethnic", "modern"],
-        Color: ["metallic", "neutral", "colorful"],
-        Significance: ["cultural", "religious", "personal"]
-    },
-    Expression: {
-        Facial: ["happy", "sad", "angry", "thoughtful", "blank", "mischievous"],
-        BodyLanguage: ["confident", "shy", "restless", "relaxed"]
-    },
-    Behaviour: {
-        Mannerisms: ["calm", "fidgety", "graceful", "clumsy"],
-        Posture: ["upright", "slouched", "relaxed", "stiff"],
-        Attitude: ["polite", "arrogant", "cheerful", "reserved"]
-    },
-    Voice: {
-        Tone: ["gentle", "harsh", "firm", "soothing"],
-        Pitch: ["high", "low", "medium"],
-        Volume: ["soft", "loud", "moderate"],
-        Accent: ["regional", "foreign", "neutral"]
-    },
-    Smile: {
-        Type: ["wide", "subtle", "crooked", "dimpled"],
-        Warmth: ["genuine", "fake", "polite", "radiant"],
-        Frequency: ["rare", "occasional", "frequent"]
-    },
-    Personality: {
-        Traits: ["kind", "ambitious", "shy", "extroverted", "introverted", "witty", "empathetic"],
-        Characteristics: ["disciplined", "spontaneous", "patient", "stubborn"],
-        Quirks: ["unique habits", "speech patterns", "hobbies"]
-    }
-};

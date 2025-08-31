@@ -6,6 +6,8 @@ import React from 'react'
 import ClientPage from './clientPage'
 
 
+export const dynamic = "force-dynamic";
+
 async function fetchObjectData(object_name) {
     try {
         const host = (await headers()).get("host")

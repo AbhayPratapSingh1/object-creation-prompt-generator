@@ -1,11 +1,8 @@
-"use server"
-
-
 import { headers } from 'next/headers'
 import React from 'react'
 import ClientPage from './clientPage'
 
-
+export const revalidate = 0;
 export const dynamic = "force-dynamic";
 
 async function fetchObjectData(object_name) {
@@ -19,8 +16,8 @@ async function fetchObjectData(object_name) {
         return data
     }
     catch(e){
+        console.log("first",e)
         throw new Error("Unable to fetch data right now!")
-        return []
     }
 }
 

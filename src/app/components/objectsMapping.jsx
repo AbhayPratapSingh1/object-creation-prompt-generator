@@ -8,7 +8,7 @@ export default function ObjectsMapping({ data }) {
         <div className="">
             <div className="text-sm font-semibold text-gray-700">Generate Prompt For:</div>
             <div className="ml-2">
-                { data && data.data && data.data.length > 0 && data.data.map((each, index) => {
+                { data && data && data.length > 0 && data.map((each, index) => {
                     return (
                         <Link key={index} href={`/object/${each.object_name}`}>
                             <div className="flex gap-2 items-center font-sm font-semibold">

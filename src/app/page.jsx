@@ -1,5 +1,3 @@
-"use server"
-
 import React from 'react'
 import ObjectsMapping from './components/objectsMapping'
 import db_connection from '@/server/mongoDbConnect'
@@ -15,11 +13,11 @@ async function fetchObjectData() {
 }
 
 export const dynamic = "force-dynamic";
-
+export const revalidate = 0;
 
 export default async function Page() {
   let data = await fetchObjectData()
-
+  console.log("\n\n\ndata",data)
   return (
     <div className='flex flex-col h-full flex-grow p-2'>
       <ObjectsMapping data={data} />
